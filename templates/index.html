@@ -21,9 +21,9 @@
 
             <nav>
                 <a href="#" class="active">Dashboard</a>
-                <a href="#">Process Manager</a>
-                <a href="#">Scheduling Simulator</a>
-                <a href="#">Algorithm Comparison</a>
+                <a href="#process-manager">Process Manager</a>
+                <a href="#simulator">Scheduling Simulator</a>
+                <a href="#comparison">Algorithm Comparison</a>
                 <a href="#">Analytics</a>
                 <a href="#">Experiment History</a>
             </nav>
@@ -111,13 +111,18 @@
                         Add processes, pick an algorithm, then start.
                     </p>
 
-                    <button class="primary-btn" id="startSimBtn">
-                        Start Simulation
-                    </button>
+                    <div class="btn-row">
+                        <button class="primary-btn" id="startSimBtn">
+                            Start Simulation
+                        </button>
+                        <button class="secondary-btn" id="compareBtn">
+                            Compare All
+                        </button>
+                    </div>
                 </div>
 
 
-                <div class="panel">
+                <div class="panel" id="simulator">
                     <div class="panel-header">
                         <h3>Scheduling Algorithms</h3>
                     </div>
@@ -135,7 +140,7 @@
 
 
             <!-- Process Manager -->
-            <section class="panel process-panel">
+            <section class="panel process-panel" id="process-manager">
 
                 <div class="panel-header">
                     <div>
@@ -191,7 +196,36 @@
                     <tbody id="resultsBody"></tbody>
                 </table>
             </section>
-            
+            <!-- Algorithm Comparison -->
+            <section class="panel results-panel" id="comparison">
+                <div class="panel-header">
+                    <h3>Algorithm Comparison</h3>
+                    <span id="compareLabel"></span>
+                </div>
+
+                <p class="empty-message" id="compareEmpty">
+                    Add processes and click Compare All to run every algorithm on the same workload.
+                </p>
+
+                <div id="compareContent" class="hidden">
+                    <p class="verdict" id="verdict"></p>
+
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Algorithm</th><th>Avg waiting</th><th>Avg turnaround</th>
+                                    <th>Avg response</th><th>Context switches</th>
+                                    <th>CPU utilization</th><th>Throughput</th>
+                                </tr>
+                            </thead>
+                            <tbody id="compareBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="chart-grid" id="compareCharts"></div>
+                </div>
+            </section>
             <!-- Add Process Modal -->
             <div class="modal" id="processModal">
 

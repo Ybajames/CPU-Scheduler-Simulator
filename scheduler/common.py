@@ -41,6 +41,9 @@ def build_result(ps, slices):
             "response": p["start"] - p["arrival"],
         })
 
+    busy_order = [s["pid"] for s in timeline if s["pid"] != "Idle"]
+    switches = sum(1 for a, b in zip(busy_order, busy_order[1:]) if a != b)
+
     total_time = max((r["completion"] for r in rows), default=0)
     busy = sum(s["end"] - s["start"] for s in timeline if s["pid"] != "Idle")
     n = len(rows) or 1
@@ -53,6 +56,7 @@ def build_result(ps, slices):
             "avg_response": round(sum(r["response"] for r in rows) / n, 2),
             "cpu_utilization": round(busy / total_time * 100, 2) if total_time else 0,
             "throughput": round(len(rows) / total_time, 3) if total_time else 0,
+            "context_switches": switches,
             "total_time": total_time,
         },
     }

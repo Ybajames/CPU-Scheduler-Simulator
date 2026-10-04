@@ -470,3 +470,56 @@ td button {
 
 .gantt-ticks span { position: relative; text-align: left; }
 .gantt-ticks em { position: absolute; right: 0; font-style: normal; }
+
+
+/* Comparison */
+html { scroll-behavior: smooth; }
+
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.verdict {
+    background-color: #0f2a36;
+    border: 1px solid #155e75;
+    color: #7dd3fc;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin: 6px 0 20px;
+}
+
+.table-scroll { overflow-x: auto; }
+
+td.best-cell { color: #4ade80; font-weight: 700; }
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 36px;
+    margin-top: 10px;
+}
+
+.bar-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 48px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 9px;
+    font-size: 13px;
+}
+
+.bar-label { color: #94a3b8; }
+.bar-value { text-align: right; color: #e2e8f0; }
+
+.bar-track {
+    background-color: #0b1120;
+    border-radius: 6px;
+    height: 14px;
+    overflow: hidden;
+}
+
+.bar-fill { height: 100%; background-color: #475569; border-radius: 6px; }
+.bar-fill.best { background-color: #38bdf8; }
+
+@media (max-width: 900px) {
+    .chart-grid { grid-template-columns: 1fr; }
+}
