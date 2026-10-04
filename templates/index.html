@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduler Lab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+        <div class="logo">
+            <h2>CPU<span>Lab.</span></h2>
+            <p>CPU Scheduling Platform</p>
+        </div>
+
+            <nav>
+                <a href="#" class="active">Dashboard</a>
+                <a href="#">Process Manager</a>
+                <a href="#">Scheduling Simulator</a>
+                <a href="#">Algorithm Comparison</a>
+                <a href="#">Analytics</a>
+                <a href="#">Experiment History</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>System Monitor</p>
+            </div>
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <header class="topbar">
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Monitor and analyze CPU scheduling performance.</p>
+                </div>
+
+                <div class="status">
+                    <span class="status-dot"></span>
+                    System Ready
+                </div>
+            </header>
+
+
+            <!-- Statistics Cards -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <p>Total Processes</p>
+                    <h2 id="totalProcesses">0</h2>
+                    <small>Currently loaded</small>
+                </div>
+
+                <div class="stat-card">
+                    <p>CPU Utilization</p>
+                    <h2 id="statUtil">0%</h2>
+                    <small>Simulation utilization</small>
+                </div>
+
+                <div class="stat-card">
+                    <p>Average Waiting Time</p>
+                    <h2 id="statWait">0.00</h2>
+                    <small>Time units</small>
+                </div>
+
+                <div class="stat-card">
+                    <p>Average Turnaround</p>
+                    <h2 id="statTat">0.00</h2>
+                    <small>Time units</small>
+                </div>
+
+            </section>
+
+
+            <!-- Main Dashboard Sections -->
+            <section class="dashboard-grid">
+
+                <div class="panel">
+                    <div class="sim-controls">
+                        <div>
+                            <label for="algorithmSelect">Algorithm</label>
+                            <select id="algorithmSelect">
+                                <option value="fcfs">FCFS</option>
+                                <option value="sjf">SJF</option>
+                                <option value="rr">Round Robin</option>
+                                <option value="priority">Priority</option>
+                            </select>
+                        </div>
+
+                        <div id="quantumField" class="hidden">
+                            <label for="quantum">Time quantum</label>
+                            <input type="number" id="quantum" min="1" value="2">
+                        </div>
+
+                        <label id="preemptiveField" class="check hidden">
+                            <input type="checkbox" id="preemptive">
+                            Preemptive
+                        </label>
+                    </div>
+
+                    <p class="empty-message" id="simMessage">
+                        Add processes, pick an algorithm, then start.
+                    </p>
+
+                    <button class="primary-btn" id="startSimBtn">
+                        Start Simulation
+                    </button>
+                </div>
+
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Scheduling Algorithms</h3>
+                    </div>
+
+                    <div class="algorithm-list">
+                        <div>FCFS <span>Ready</span></div>
+                        <div>SJF <span>Ready</span></div>
+                        <div>Round Robin <span>Ready</span></div>
+                        <div>Priority <span>Ready</span></div>
+                    </div>
+                </div>
+
+            </section>
+
+
+
+            <!-- Process Manager -->
+            <section class="panel process-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <h3>Process Manager</h3>
+                        <p class="section-description">Manage processes for CPU scheduling.</p>
+                    </div>
+
+                    <button class="primary-btn" id="addProcessBtn">
+                        + Add Process
+                    </button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Process ID</th>
+                            <th>Arrival Time</th>
+                            <th>Burst Time</th>
+                            <th>Priority</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="processTableBody">
+                        <tr>
+                            <td colspan="5" class="empty-message">
+                                No processes added yet.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </section>
+
+            <!-- Results -->
+            <section class="panel results-panel hidden" id="resultsPanel">
+                <div class="panel-header">
+                    <h3>Simulation Results</h3>
+                    <span id="resultsLabel"></span>
+                </div>
+
+                <h4 class="sub-title">Gantt chart</h4>
+                <div class="gantt-scroll"><div id="gantt"></div></div>
+
+                <h4 class="sub-title">Per-process metrics</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Process</th><th>Arrival</th><th>Burst</th>
+                            <th>Completion</th><th>Turnaround</th><th>Waiting</th><th>Response</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </section>
+            
+            <!-- Add Process Modal -->
+            <div class="modal" id="processModal">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h2>Add New Process</h2>
+                        <button id="closeModalBtn">&times;</button>
+                    </div>
+
+                    <form id="processForm">
+
+                        <label for="arrivalTime">Arrival Time</label>
+                        <input type="number" id="arrivalTime" min="0" required>
+
+                        <label for="burstTime">Burst Time</label>
+                        <input type="number" id="burstTime" min="1" required>
+
+                        <label for="priority">Priority</label>
+                        <input type="number" id="priority" min="1" required>
+
+                        <div class="modal-actions">
+                            <button type="button" class="secondary-btn" id="cancelBtn">
+                                    Cancel
+                            </button>
+
+                            <button type="submit" class="primary-btn">
+                                    Add Process
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
